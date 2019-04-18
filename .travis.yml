@@ -1,0 +1,21 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t lovenic/react-test -f ./client/Dockerfile.dev ./client/
+
+script:
+  - docker run lovenic/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t lovenic/multi-client ./client
+  - docker build -t lovenic/multi-nginx ./nginx
+  - docker build -t lovenic/multi-server ./server
+  - docker build -t lovenic/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push lovenic/multi-client
+  - docker push lovenic/multi-nginx
+  - docker push lovenic/multi-server
+  - docker push lovenic/multi-worker
+
