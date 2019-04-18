@@ -18,4 +18,3 @@ after_success:
   - docker push lovenic/multi-nginx
   - docker push lovenic/multi-server
   - docker push lovenic/multi-worker
-
